@@ -1,55 +1,56 @@
 "use client";
-import { FC, useState } from "react";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import styles from "./styles.module.css";
-import { useRouter } from "next/navigation";
+import styles from "./styles.module.scss";
 import Button from "../button";
 
-const Header: FC = () => {
-  const { push } = useRouter();
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+const Header = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Toggle mobile menu
+  const toggleMenu = () => {
+    setIsMobileMenuOpen((prev) => !prev);
+  };
 
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <div className={styles.logoNavWrapper}>
-          <Link href="/" className={styles.logoLink}>
-            <Image src="/globe.svg" alt="Logo" width={32} height={32} />
-            <span className={`${styles.logoText} sm:inline-block`}>
-              EventSnap
-            </span>
-          </Link>
+        {/* Logo */}
+        <Link href="/" className={styles.logo}>
+          <Image src="/globe.svg" alt="EventSnap Logo" width={32} height={32} />
+          <span>EventSnap</span>
+        </Link>
 
-          {/* Mobile Hamburger Icon */}
-          <button
-            className={styles.mobileMenuButton}
-            onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle Menu"
-          >
-            ☰
-          </button>
+        {/* Hamburger Icon */}
+        <button
+          className={styles.hamburger}
+          onClick={toggleMenu}
+          aria-label="Toggle Mobile Menu"
+        >
+          ☰
+        </button>
+      </div>
 
-          {/* Desktop Navigation */}
-          <nav
-            className={`${styles.navLinks} ${
-              isMobileMenuOpen ? styles.navLinksMobile : ""
-            }`}
-          >
-            <Link href="/events">Events</Link>
-            <Link href="/photographers">Photographers</Link>
-            <Link href="/about">About</Link>
-          </nav>
-        </div>
+      {/* Navigation Menu */}
+      <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.open : ""}`}>
+        <Link href="/events" onClick={() => setIsMobileMenuOpen(false)}>
+          Events
+        </Link>
+        <Link href="/photographers" onClick={() => setIsMobileMenuOpen(false)}>
+          Photographers
+        </Link>
+        <Link href="/about" onClick={() => setIsMobileMenuOpen(false)}>
+          About
+        </Link>
 
         {/* Auth Buttons */}
         <div className={styles.authButtons}>
-          <Button onClick={() => push("profile")} variant="ghost">
-            Sign In
-          </Button>
+          <Button variant="ghost">Sign In</Button>
           <Button>Sign Up</Button>
         </div>
-      </div>
+      </nav>
     </header>
   );
 };
