@@ -44,10 +44,7 @@ const Header: FC = () => {
 
         {/* Auth Buttons */}
         <div className={styles.authButtons}>
-          <Button
-            onClick={() => console.log("Sign In clicked")}
-            variant="ghost"
-          >
+          <Button onClick={() => push("profile")} variant="ghost">
             Sign In
           </Button>
           <Button>Sign Up</Button>
