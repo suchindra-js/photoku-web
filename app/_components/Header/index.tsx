@@ -5,9 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./styles.module.scss";
 import Button from "../button";
+import { useAuth } from "@/app/_context/auth-context";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isAuthenticated, login, logout } = useAuth(); // Get auth state and actions
 
   // Toggle mobile menu
   const toggleMenu = () => {
@@ -35,6 +37,7 @@ const Header = () => {
 
       {/* Navigation Menu */}
       <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.open : ""}`}>
+        {/* Common Links */}
         <Link href="/events" onClick={() => setIsMobileMenuOpen(false)}>
           Events
         </Link>
@@ -45,11 +48,32 @@ const Header = () => {
           About
         </Link>
 
-        {/* Auth Buttons */}
-        <div className={styles.authButtons}>
-          <Button variant="ghost">Sign In</Button>
-          <Button>Sign Up</Button>
-        </div>
+        {/* Conditional Links based on Authentication */}
+        {isAuthenticated ? (
+          <>
+            <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+              Dashboard
+            </Link>
+            <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)}>
+              Profile
+            </Link>
+            <Button variant="ghost" onClick={logout}>
+              Sign Out
+            </Button>
+          </>
+        ) : (
+          <div className={styles.authButtons}>
+            <Button
+              variant="ghost"
+              onClick={() =>
+                login("something", { id: "123", email: "user@example.com" })
+              }
+            >
+              Sign In
+            </Button>
+            <Button>Sign Up</Button>
+          </div>
+        )}
       </nav>
     </header>
   );
