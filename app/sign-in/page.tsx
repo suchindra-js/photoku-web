@@ -8,7 +8,7 @@ const SignIn: FC = () => {
   return (
     <div>
       <div>SignIn</div>
-      <Button onClick={() => push("profile")}>Sign In</Button>
+      <Button onClick={() => push("/profile")}>Sign In</Button>
     </div>
   );
 };
