@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./styles.module.scss";
 import Button from "../button";
-import { useAuth } from "@/app/_context/auth-context";
+import { useAuth } from "@contexts/auth-context";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

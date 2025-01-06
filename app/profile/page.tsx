@@ -1,8 +1,8 @@
 "use client";
 import { FC } from "react";
 import styles from "./page.module.css";
-import ProfilePhoto from "../_components/profile-photo";
-import EventListing from "../_components/event-listing";
+import ProfilePhoto from "@components/profile-photo";
+import EventListing from "@components/event-listing";
 
 const events = [
   {
