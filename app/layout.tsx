@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "./_components/header";
 import Breadcrumb from "./_components/breadcrumb";
 import { AuthProvider } from "./_context/auth-context";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,17 +30,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AuthProvider>
-        <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          <Header />
-          <Breadcrumb
-            homeElement="Home"
-            separator={<span>/</span>}
-            capitalizeLinks
-          />
-          {children}
-        </body>
-      </AuthProvider>
+      <UserProvider>
+        <AuthProvider>
+          <body className={`${geistSans.variable} ${geistMono.variable}`}>
+            <Header />
+            <Breadcrumb homeElement="Home" capitalizeLinks />
+            {children}
+          </body>
+        </AuthProvider>
+      </UserProvider>
     </html>
   );
 }

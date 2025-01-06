@@ -38,15 +38,22 @@ const Header = () => {
       {/* Navigation Menu */}
       <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.open : ""}`}>
         {/* Common Links */}
-        <Link href="/events" onClick={() => setIsMobileMenuOpen(false)}>
-          Events
-        </Link>
-        <Link href="/photographers" onClick={() => setIsMobileMenuOpen(false)}>
-          Photographers
-        </Link>
-        <Link href="/about" onClick={() => setIsMobileMenuOpen(false)}>
-          About
-        </Link>
+        {!isAuthenticated && (
+          <>
+            <Link href="/events" onClick={() => setIsMobileMenuOpen(false)}>
+              Events
+            </Link>
+            <Link
+              href="/photographers"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Photographers
+            </Link>
+            <Link href="/about" onClick={() => setIsMobileMenuOpen(false)}>
+              About
+            </Link>
+          </>
+        )}
 
         {/* Conditional Links based on Authentication */}
         {isAuthenticated ? (
@@ -63,12 +70,7 @@ const Header = () => {
           </>
         ) : (
           <div className={styles.authButtons}>
-            <Button
-              variant="ghost"
-              onClick={() =>
-                login("something", { id: "123", email: "user@example.com" })
-              }
-            >
+            <Button variant="ghost" onClick={() => login()}>
               Sign In
             </Button>
             <Button>Sign Up</Button>

@@ -1,4 +1,6 @@
 "use client";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { useRouter } from "next/navigation";
 import {
   createContext,
   useState,
@@ -8,22 +10,16 @@ import {
 } from "react";
 
 // Types for User and AuthContext
-interface User {
-  id: string;
-  email: string;
-}
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  user: User | null;
-  login: (token: string, user: User) => void;
+  login: () => void;
   logout: () => void;
 }
 
 // Create a context with default values
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
-  user: null,
   login: () => {},
   logout: () => {},
 });
@@ -35,51 +31,27 @@ export const useAuth = () => {
 // AuthProvider component to wrap around your app
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null>(null);
+  const { user } = useUser();
+  const { push } = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      // Assuming a function `fetchUser` that verifies the token and fetches user info
-      fetchUser(token)
-        .then((userData) => {
-          setIsAuthenticated(true);
-          setUser(userData);
-        })
-        .catch(() => {
-          setIsAuthenticated(false);
-          setUser(null);
-        });
+    if (user) {
+      setIsAuthenticated(!!user);
     }
   }, []);
 
-  const login = (token: string, user: User) => {
-    localStorage.setItem("authToken", token);
+  const login = () => {
     setIsAuthenticated(true);
-    setUser(user);
+    push("/api/auth/login");
   };
 
   const logout = () => {
-    localStorage.removeItem("authToken");
-    setIsAuthenticated(false);
-    setUser(null);
+    push("/api/auth/logout");
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-// A mock function for fetching user data (you'll replace this with your API logic)
-const fetchUser = (token: string): Promise<User> => {
-  return new Promise((resolve, reject) => {
-    // Replace with an actual API call to validate token and fetch user
-    if (token === "validToken") {
-      resolve({ id: "123", email: "user@example.com" });
-    } else {
-      reject("Invalid token");
-    }
-  });
 };

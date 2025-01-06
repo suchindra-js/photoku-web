@@ -1,6 +1,5 @@
 "use client";
 import { FC } from "react";
-import styles from "./page.module.css";
 import Button from "../_components/button";
 import { useRouter } from "next/navigation";
 

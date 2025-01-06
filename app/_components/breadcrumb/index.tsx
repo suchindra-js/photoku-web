@@ -2,12 +2,10 @@
 
 import React, { ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 import styles from "./styles.module.scss";
 
 type TBreadCrumbProps = {
   homeElement: ReactNode;
-  separator: ReactNode;
   containerClasses?: string;
   listClasses?: string;
   activeClasses?: string;
@@ -16,7 +14,6 @@ type TBreadCrumbProps = {
 
 const Breadcrumb = ({
   homeElement,
-  separator,
   containerClasses = styles.breadcrumbContainer,
   listClasses = styles.breadcrumbItem,
   activeClasses = styles.breadcrumbActive,
