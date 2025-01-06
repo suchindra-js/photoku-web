@@ -6,13 +6,11 @@ const nextConfig: NextConfig = {
     domains: ["picsum.photos"],
   },
   webpack(config, { isServer }) {
-    // Add path aliases
     config.resolve.alias = {
       ...config.resolve.alias,
       "@components": path.resolve(__dirname, "app/_components"),
       "@context": path.resolve(__dirname, "app/_context"),
     };
-
     return config;
   },
 };
