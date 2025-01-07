@@ -1,16 +1,15 @@
 "use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./styles.module.scss";
 import Button from "../button";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  // const { isAuthenticated, login, logout } = useAuth(); // Get auth state and actions
-  const { user } = useUser();
+  const { data: session } = useSession();
 
   // Toggle mobile menu
   const toggleMenu = () => {
@@ -39,7 +38,7 @@ const Header = () => {
       {/* Navigation Menu */}
       <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.open : ""}`}>
         {/* Common Links */}
-        {!user && (
+        {!session && (
           <>
             <Link href="/events" onClick={() => setIsMobileMenuOpen(false)}>
               Events
@@ -57,7 +56,7 @@ const Header = () => {
         )}
 
         {/* Conditional Links based on Authentication */}
-        {user ? (
+        {session ? (
           <>
             <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
               Dashboard
@@ -65,23 +64,13 @@ const Header = () => {
             <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)}>
               Profile
             </Link>
-            <Button
-              variant="ghost"
-              onClick={() => {
-                window.location.href = "/api/auth/logout";
-              }}
-            >
+            <Button variant="ghost" onClick={() => signOut()}>
               Sign Out
             </Button>
           </>
         ) : (
           <div className={styles.authButtons}>
-            <Button
-              variant="ghost"
-              onClick={() => {
-                window.location.href = "/api/auth/login";
-              }}
-            >
+            <Button variant="ghost" onClick={() => signIn("google")}>
               Sign In
             </Button>
             {/* <a href="/api/auth/login" data-testid="login">
