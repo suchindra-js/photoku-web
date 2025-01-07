@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
-import { AuthProvider } from "@contexts/auth-context";
 import Header from "@components/header";
 import Breadcrumb from "@components/breadcrumb";
 
@@ -31,13 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <UserProvider>
-        <AuthProvider>
-          <body className={`${geistSans.variable} ${geistMono.variable}`}>
-            <Header />
-            <Breadcrumb homeElement="Home" capitalizeLinks />
-            {children}
-          </body>
-        </AuthProvider>
+        <body className={`${geistSans.variable} ${geistMono.variable}`}>
+          <Header />
+          <Breadcrumb homeElement="Home" capitalizeLinks />
+          {children}
+        </body>
       </UserProvider>
     </html>
   );

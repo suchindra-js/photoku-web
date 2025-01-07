@@ -5,11 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./styles.module.scss";
 import Button from "../button";
-import { useAuth } from "@contexts/auth-context";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isAuthenticated, login, logout } = useAuth(); // Get auth state and actions
+  // const { isAuthenticated, login, logout } = useAuth(); // Get auth state and actions
+  const { user } = useUser();
 
   // Toggle mobile menu
   const toggleMenu = () => {
@@ -38,7 +39,7 @@ const Header = () => {
       {/* Navigation Menu */}
       <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.open : ""}`}>
         {/* Common Links */}
-        {!isAuthenticated && (
+        {!user && (
           <>
             <Link href="/events" onClick={() => setIsMobileMenuOpen(false)}>
               Events
@@ -56,7 +57,7 @@ const Header = () => {
         )}
 
         {/* Conditional Links based on Authentication */}
-        {isAuthenticated ? (
+        {user ? (
           <>
             <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
               Dashboard
@@ -64,15 +65,28 @@ const Header = () => {
             <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)}>
               Profile
             </Link>
-            <Button variant="ghost" onClick={logout}>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                window.location.href = "/api/auth/logout";
+              }}
+            >
               Sign Out
             </Button>
           </>
         ) : (
           <div className={styles.authButtons}>
-            <Button variant="ghost" onClick={() => login()}>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                window.location.href = "/api/auth/login";
+              }}
+            >
               Sign In
             </Button>
+            {/* <a href="/api/auth/login" data-testid="login">
+              Login
+            </a> */}
             <Button>Sign Up</Button>
           </div>
         )}
