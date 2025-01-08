@@ -16,4 +16,18 @@ const pool = new Pool({
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PostgresAdapter(pool),
   providers: [Google],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = user.role; // Add role to the JWT token
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token?.role) {
+        session.user.role = token.role; // Add role to session
+      }
+      return session;
+    },
+  },
 });

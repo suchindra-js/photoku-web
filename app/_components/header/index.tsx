@@ -75,7 +75,11 @@ const Header = () => {
           <div className={styles.authButtons}>
             <Button
               variant="ghost"
-              onClick={() => signIn("google", { redirectTo: "/dashboard" })}
+              onClick={() =>
+                signIn("google", {
+                  redirectTo: "/dashboard",
+                })
+              }
             >
               Sign In
             </Button>
