@@ -64,13 +64,19 @@ const Header = () => {
             <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)}>
               Profile
             </Link>
-            <Button variant="ghost" onClick={() => signOut()}>
+            <Button
+              variant="ghost"
+              onClick={() => signOut({ redirectTo: "/" })}
+            >
               Sign Out
             </Button>
           </>
         ) : (
           <div className={styles.authButtons}>
-            <Button variant="ghost" onClick={() => signIn("google")}>
+            <Button
+              variant="ghost"
+              onClick={() => signIn("google", { redirectTo: "/dashboard" })}
+            >
               Sign In
             </Button>
             {/* <a href="/api/auth/login" data-testid="login">
