@@ -33,7 +33,7 @@ export default function RootLayout({
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <Header />
           <Breadcrumb homeElement="Home" capitalizeLinks />
-          {children}
+          <div className="page">{children}</div>
         </body>
       </SessionProvider>
     </html>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import PhotographerDashboard from "./PhotographerDashboard";
+import PhotographerDashboard from "../_components/photographer-dashboard";
 import UserDashboard from "./UserDashboard";
 
 const Dashboard = () => {

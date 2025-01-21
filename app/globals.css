@@ -121,3 +121,7 @@ textarea:not([rows]) {
 :target {
   scroll-margin-block: 5ex;
 }
+
+.page {
+  padding: 5px 10px;
+}

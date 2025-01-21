@@ -61,6 +61,9 @@ const Header = () => {
             <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
               Dashboard
             </Link>
+            <Link href="/event" onClick={() => setIsMobileMenuOpen(false)}>
+              Event
+            </Link>
             <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)}>
               Profile
             </Link>
