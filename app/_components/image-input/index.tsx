@@ -11,7 +11,7 @@ const ImageInput: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [".jpeg", ".png", ".jpg"],
     },
@@ -46,7 +46,7 @@ const ImageInput: FC = () => {
     <section className={styles.container}>
       <div {...getRootProps({ className: styles.dropzone })}>
         <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
+        <p>Drag &apos;n&apos; drop some files here, or click to select files</p>
       </div>
       <aside>
         <h4>Uploaded Files</h4>

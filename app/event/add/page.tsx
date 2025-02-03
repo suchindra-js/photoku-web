@@ -2,7 +2,7 @@
 import ImageInput from "@components/image-input";
 import TextAreaInput from "@components/text-area-input";
 import TextInput from "@components/text-input";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import { FC } from "react";
 
 const EventAdd: FC = () => {
