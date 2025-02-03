@@ -1,12 +1,13 @@
 "use client";
 import ImageInput from "@components/image-input";
+import TextAreaInput from "@components/text-area-input";
+import TextInput from "@components/text-input";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { FC } from "react";
 
 const EventAdd: FC = () => {
   return (
     <div>
-      <div>Title</div>
       <div>
         <Formik
           initialValues={{ email: "", password: "" }}
@@ -30,10 +31,8 @@ const EventAdd: FC = () => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <Field type="email" name="email" />
-              <ErrorMessage name="email" component="div" />
-              <Field type="password" name="password" />
-              <ErrorMessage name="password" component="div" />
+              <TextInput label="Title" name="title" />
+              <TextAreaInput label="Description" name="description" />
               <ImageInput />
               <button type="submit" disabled={isSubmitting}>
                 Submit
