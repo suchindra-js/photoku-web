@@ -49,7 +49,6 @@ const ImageInput: FC = () => {
         <p>Drag &apos;n&apos; drop some files here, or click to select files</p>
       </div>
       <aside>
-        <h4>Uploaded Files</h4>
         <div className={styles.previews}>
           {previewImages.map((imageUrl, index) => (
             <img
