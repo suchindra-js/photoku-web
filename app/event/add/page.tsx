@@ -1,9 +1,11 @@
 "use client";
+import Button from "@components/button";
 import ImageInput from "@components/image-input";
 import TextAreaInput from "@components/text-area-input";
 import TextInput from "@components/text-input";
 import { Formik, Form } from "formik";
 import { FC } from "react";
+import styles from "./styles.module.scss";
 
 const EventAdd: FC = () => {
   return (
@@ -34,9 +36,10 @@ const EventAdd: FC = () => {
               <TextInput label="Title" name="title" />
               <TextAreaInput label="Description" name="description" />
               <ImageInput />
-              <button type="submit" disabled={isSubmitting}>
-                Submit
-              </button>
+              <div className={styles.footer}>
+                <Button variant="ghost">Cancel</Button>
+                <Button variant="default">Save</Button>
+              </div>
             </Form>
           )}
         </Formik>

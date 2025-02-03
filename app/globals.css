@@ -124,4 +124,5 @@ textarea:not([rows]) {
 
 .page {
   padding: 5px 10px;
+  height: 100%;
 }
