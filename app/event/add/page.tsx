@@ -1,4 +1,5 @@
 "use client";
+import ImageInput from "@components/image-input";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { FC } from "react";
 
@@ -33,6 +34,7 @@ const EventAdd: FC = () => {
               <ErrorMessage name="email" component="div" />
               <Field type="password" name="password" />
               <ErrorMessage name="password" component="div" />
+              <ImageInput />
               <button type="submit" disabled={isSubmitting}>
                 Submit
               </button>
