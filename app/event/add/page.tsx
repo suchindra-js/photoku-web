@@ -6,6 +6,12 @@ import TextInput from "@components/text-input";
 import { Formik, Form } from "formik";
 import { FC } from "react";
 import styles from "./styles.module.scss";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object().shape({
+  title: Yup.string().required("Title is required"),
+  description: Yup.string().required("Description is required"),
+});
 
 const EventAdd: FC = () => {
   return (
@@ -13,17 +19,7 @@ const EventAdd: FC = () => {
       <div>
         <Formik
           initialValues={{ email: "", password: "" }}
-          validate={(values) => {
-            const errors = { email: null };
-            if (!values.email) {
-              errors.email = "Required";
-            } else if (
-              !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-            ) {
-              errors.email = "Invalid email address";
-            }
-            return errors;
-          }}
+          validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
             setTimeout(() => {
               alert(JSON.stringify(values, null, 2));
@@ -31,14 +27,16 @@ const EventAdd: FC = () => {
             }, 400);
           }}
         >
-          {({ isSubmitting }) => (
+          {({ isValid }) => (
             <Form>
               <TextInput label="Title" name="title" />
               <TextAreaInput label="Description" name="description" />
               <ImageInput />
               <div className={styles.footer}>
                 <Button variant="ghost">Cancel</Button>
-                <Button variant="default">Save</Button>
+                <Button disabled={!isValid} variant="default" type="submit">
+                  Save
+                </Button>
               </div>
             </Form>
           )}

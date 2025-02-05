@@ -15,6 +15,7 @@ const TextInput: FC<TextInputProps> = ({ label, name, ...props }) => {
       <label htmlFor={name} className={styles.label}>
         {label}
       </label>
+      {meta.touched}
       <input
         {...field}
         {...props}

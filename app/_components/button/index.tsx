@@ -6,6 +6,8 @@ interface ButtonProps {
   onClick?: () => void; // Optional click handler
   className?: string; // Additional custom styles
   children: ReactNode; // Button label or content
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -13,13 +15,20 @@ const Button: FC<ButtonProps> = ({
   onClick,
   className,
   children,
+  type = "button",
+  disabled,
 }) => {
   const buttonClass = `${styles.button} ${
     variant === "ghost" ? styles.ghostButton : ""
-  } ${className || ""}`.trim();
+  } ${disabled ? styles.disabled : ""} ${className || ""}`.trim();
 
   return (
-    <button onClick={onClick} className={buttonClass}>
+    <button
+      type={type}
+      onClick={onClick}
+      className={buttonClass}
+      disabled={disabled}
+    >
       {children}
     </button>
   );
