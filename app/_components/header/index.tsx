@@ -79,7 +79,7 @@ const Header = () => {
             <Button
               variant="ghost"
               onClick={() =>
-                signIn("google", {
+                signIn("", {
                   redirectTo: "/dashboard",
                 })
               }

@@ -3,7 +3,7 @@ import { DefaultSession, DefaultUser } from "@auth";
 // Extend the User interface to include role
 declare module "next-auth" {
   interface User extends DefaultUser {
-    role?: string;
+    token?: string;
   }
 
   interface Session {
@@ -11,5 +11,6 @@ declare module "next-auth" {
       id?: string;
       role?: string;
     } & DefaultSession["USER"];
+    accessToken?: any;
   }
 }

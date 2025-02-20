@@ -1,33 +1,78 @@
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
-import PostgresAdapter from "@auth/pg-adapter";
-import { Pool } from "pg";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-const pool = new Pool({
-  host: process.env.DATABASE_HOST,
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Email and password are required.");
+        }
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PostgresAdapter(pool),
-  providers: [Google],
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                email: credentials.email,
+                password: credentials.password,
+              }),
+            }
+          );
+
+          const user = await res.json();
+
+          if (!res.ok || !user.id || !user.email) {
+            throw new Error("Invalid credentials.");
+          }
+
+          // ✅ Return the user object (including the token)
+          return {
+            id: user.id.toString(),
+            email: user.email,
+            name: user.name,
+            token: user.token, // Save the token
+          };
+        } catch (error) {
+          console.error("Authentication Error:", error.message);
+          throw new Error("Authentication failed.");
+        }
+      },
+    }),
+  ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = user.role; // Add role to the JWT token
+        token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+        token.accessToken = user.token; // ✅ Store the JWT token
       }
       return token;
     },
     async session({ session, token }) {
-      if (token?.role) {
-        session.user.role = token.role; // Add role to session
+      if (session.user) {
+        session.user.id = token.id;
+        session.user.email = token.email;
+        session.user.name = token.name;
+        session.user.accessToken = token.accessToken; // ✅ Pass token to session
       }
       return session;
     },
+  },
+
+  pages: {
+    signIn: "/sign-in", // Custom login page
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
   },
 });

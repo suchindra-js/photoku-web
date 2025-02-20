@@ -7,6 +7,7 @@ import { Formik, Form } from "formik";
 import { FC } from "react";
 import styles from "./styles.module.scss";
 import * as Yup from "yup";
+import { apiFetch } from "app/_lib/api";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
@@ -14,6 +15,23 @@ const validationSchema = Yup.object().shape({
 });
 
 const EventAdd: FC = () => {
+  async function createEvent() {
+    const data = {
+      title: "testing",
+      description: "description baby",
+    };
+
+    try {
+      const response = await apiFetch("/events", {
+        method: "POST", // Set method to POST
+        body: JSON.stringify(data), // Include the data in the body of the request
+      });
+
+      console.log("Event created:", response);
+    } catch (error) {
+      console.error("Error creating event:", error);
+    }
+  }
   return (
     <div>
       <div>
@@ -23,6 +41,7 @@ const EventAdd: FC = () => {
           onSubmit={(values, { setSubmitting }) => {
             setTimeout(() => {
               alert(JSON.stringify(values, null, 2));
+
               setSubmitting(false);
             }, 400);
           }}
@@ -34,7 +53,12 @@ const EventAdd: FC = () => {
               <ImageInput />
               <div className={styles.footer}>
                 <Button variant="ghost">Cancel</Button>
-                <Button disabled={!isValid} variant="default" type="submit">
+                <Button
+                  disabled={!isValid}
+                  variant="default"
+                  type="submit"
+                  onClick={() => createEvent()}
+                >
                   Save
                 </Button>
               </div>
