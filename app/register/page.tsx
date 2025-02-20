@@ -1,57 +1,112 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import styles from "./page.module.scss"; // Import SCSS using your preferred style
+import Button from "@components/button";
 
 export default function RegisterPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const router = useRouter();
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const initialValues = { name: "", email: "", password: "" };
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, name }),
-    });
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    password: Yup.string()
+      .min(6, "Password must be at least 6 characters")
+      .required("Password is required"),
+  });
 
-    if (res.ok) {
-      router.push("/sign-in"); // Redirect to login after registration
-    } else {
-      alert("Registration failed");
+  const handleRegister = async (
+    values: typeof initialValues,
+    { setSubmitting }: any
+  ) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values),
+        }
+      );
+
+      if (res.ok) {
+        router.push("/sign-in"); // Redirect after success
+      } else {
+        alert("Registration failed");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong");
     }
+    setSubmitting(false);
   };
 
   return (
-    <div>
+    <div className={styles.registerContainer}>
       <h2>Register</h2>
-      <form onSubmit={handleRegister}>
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Register</button>
-      </form>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleRegister}
+      >
+        {({ isSubmitting }) => (
+          <Form className={styles.registerForm}>
+            <div className={styles.formGroup}>
+              <Field
+                type="text"
+                name="name"
+                placeholder="Name"
+                className={styles.input}
+              />
+              <ErrorMessage
+                name="name"
+                component="div"
+                className={styles.error}
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <Field
+                type="email"
+                name="email"
+                placeholder="Email"
+                className={styles.input}
+              />
+              <ErrorMessage
+                name="email"
+                component="div"
+                className={styles.error}
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <Field
+                type="password"
+                name="password"
+                placeholder="Password"
+                className={styles.input}
+              />
+              <ErrorMessage
+                name="password"
+                component="div"
+                className={styles.error}
+              />
+            </div>
+
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className={styles.submitButton}
+            >
+              {isSubmitting ? "Registering..." : "Register"}
+            </Button>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 }
