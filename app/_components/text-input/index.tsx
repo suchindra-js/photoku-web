@@ -3,7 +3,7 @@ import { FC, InputHTMLAttributes } from "react";
 import styles from "./styles.module.scss";
 
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   name: string;
 }
 
@@ -12,9 +12,11 @@ const TextInput: FC<TextInputProps> = ({ label, name, ...props }) => {
 
   return (
     <div className={styles.container}>
-      <label htmlFor={name} className={styles.label}>
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={name} className={styles.label}>
+          {label}
+        </label>
+      )}
       {meta.touched}
       <input
         {...field}

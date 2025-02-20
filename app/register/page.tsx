@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "./page.module.scss"; // Import SCSS using your preferred style
 import Button from "@components/button";
+import TextInput from "@components/text-input";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -55,47 +56,9 @@ export default function RegisterPage() {
       >
         {({ isSubmitting }) => (
           <Form className={styles.registerForm}>
-            <div className={styles.formGroup}>
-              <Field
-                type="text"
-                name="name"
-                placeholder="Name"
-                className={styles.input}
-              />
-              <ErrorMessage
-                name="name"
-                component="div"
-                className={styles.error}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <Field
-                type="email"
-                name="email"
-                placeholder="Email"
-                className={styles.input}
-              />
-              <ErrorMessage
-                name="email"
-                component="div"
-                className={styles.error}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <Field
-                type="password"
-                name="password"
-                placeholder="Password"
-                className={styles.input}
-              />
-              <ErrorMessage
-                name="password"
-                component="div"
-                className={styles.error}
-              />
-            </div>
+            <TextInput name="name" placeholder="Name" />
+            <TextInput name="email" placeholder="Email" />
+            <TextInput name="password" placeholder="Password" />
 
             <Button
               type="submit"

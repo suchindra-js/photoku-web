@@ -1,5 +1,7 @@
 .container {
-  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
 
 .label {
@@ -10,10 +12,9 @@
 
 .input {
   width: 100%;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 
   &:focus {
     outline: none;
@@ -27,7 +28,6 @@
 }
 
 .errorMessage {
-  margin-top: 0.5rem;
   color: #dc3545;
   font-size: 0.875rem;
 }

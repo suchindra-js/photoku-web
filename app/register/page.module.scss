@@ -19,30 +19,3 @@
   flex-direction: column;
   gap: 15px;
 }
-
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-
-  input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s ease-in-out;
-
-    &:focus {
-      border-color: #007bff;
-      outline: none;
-      box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-    }
-  }
-}
-
-.error {
-  color: red;
-  font-size: 0.875rem;
-  margin-top: 5px;
-}
