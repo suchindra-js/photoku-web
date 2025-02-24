@@ -6,10 +6,12 @@ import styles from "./styles.module.scss";
 import Button from "../button";
 import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session } = useSession();
+  const { push } = useRouter();
 
   // Toggle mobile menu
   const toggleMenu = () => {
@@ -86,10 +88,15 @@ const Header = () => {
             >
               Sign In
             </Button>
-            {/* <a href="/api/auth/login" data-testid="login">
-              Login
-            </a> */}
-            <Button>Sign Up</Button>
+
+            <Button
+              onClick={() => {
+                push("/register");
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Sign Up
+            </Button>
           </div>
         )}
       </nav>
