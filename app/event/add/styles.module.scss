@@ -8,3 +8,9 @@
   justify-content: flex-end;
   margin-top: auto;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
