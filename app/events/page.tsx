@@ -4,12 +4,7 @@ import styles from "./styles.module.scss";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "app/_lib/api";
 import Button from "@components/button";
-
-interface Event {
-  id: string;
-  title: string;
-  description: string;
-}
+import { Event } from "app/_types/event";
 
 const EventListing: FC = () => {
   const { push } = useRouter();
@@ -50,7 +45,7 @@ const EventListing: FC = () => {
             <div
               key={event.id}
               className={styles.eventCard}
-              onClick={() => push(`/event/${event.id}`)}
+              onClick={() => push(`/events/${event.id}`)}
             >
               <h3>{event.title}</h3>
               <p>{event.description}</p>

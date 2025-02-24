@@ -34,7 +34,7 @@ const EventAdd: FC = () => {
         body: JSON.stringify(values),
       });
 
-      push("/event");
+      push("/events");
     } catch (error) {
     } finally {
       setSubmitting(false);
