@@ -21,7 +21,7 @@ interface FormValues {
 }
 
 const EventAdd: FC = () => {
-  const { push } = useRouter();
+  const { push, back } = useRouter();
 
   const onSubmit = async (
     values: FormValues,
@@ -54,7 +54,7 @@ const EventAdd: FC = () => {
             <TextAreaInput label="Description" name="description" />
             <ImageInput />
             <div className={styles.footer}>
-              <Button variant="ghost" type="button">
+              <Button variant="ghost" type="button" onClick={() => back()}>
                 Cancel
               </Button>
               <Button

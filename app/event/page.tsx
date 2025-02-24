@@ -1,16 +1,63 @@
 "use client";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { useRouter } from "next/navigation";
+import { apiFetch } from "app/_lib/api";
+import Button from "@components/button";
+
+interface Event {
+  id: string;
+  title: string;
+  description: string;
+}
 
 const EventListing: FC = () => {
   const { push } = useRouter();
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const data = await apiFetch<Event[]>("/events");
+        setEvents(data);
+      } catch (error) {
+        console.error("Failed to fetch events:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
   return (
     <div className={styles.container}>
+      {/* Header */}
       <div className={styles.header}>
-        <div>Events</div>
-        <div onClick={() => push("event/add")}>+ Add</div>
+        <h1>Events</h1>
+        <Button onClick={() => push("/event/add")}>+ Add Event</Button>
       </div>
+
+      {/* Loading State */}
+      {loading ? (
+        <p>Loading events...</p>
+      ) : events.length === 0 ? (
+        <p>No events available.</p>
+      ) : (
+        <div className={styles.eventList}>
+          {events.map((event) => (
+            <div
+              key={event.id}
+              className={styles.eventCard}
+              onClick={() => push(`/event/${event.id}`)}
+            >
+              <h3>{event.title}</h3>
+              <p>{event.description}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

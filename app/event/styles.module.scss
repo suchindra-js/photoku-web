@@ -1,6 +1,40 @@
 .container {
-  .header {
-    display: flex;
-    justify-content: space-between;
-  }
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.eventList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.eventCard {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.eventCard:hover {
+  background: #f1f1f1;
+}
+
+.eventCard h3 {
+  margin: 0;
+}
+
+.eventCard p {
+  margin: 5px 0 0;
+  color: #666;
 }
