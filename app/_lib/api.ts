@@ -1,4 +1,5 @@
-import { getSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -29,6 +30,12 @@ export async function apiFetch<T>(
         ...options.headers, // Allow additional headers
       },
     });
+
+    if (res.status === 401) {
+      console.warn("Unauthorized access detected, logging out...");
+      await signOut({ redirectTo: "/sign-in" }); // Sign the user out
+      return Promise.reject(new Error("Unauthorized"));
+    }
 
     if (!res.ok) {
       const errorText = await res.text(); // Get detailed error message
