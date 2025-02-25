@@ -4,7 +4,7 @@ import ImageInput from "@components/image-input";
 import TextAreaInput from "@components/text-area-input";
 import TextInput from "@components/text-input";
 import { Formik, Form, FormikHelpers } from "formik";
-import { FC } from "react";
+import { FC, useState } from "react";
 import styles from "./styles.module.scss";
 import * as Yup from "yup";
 import { apiFetch } from "app/_lib/api";
@@ -22,20 +22,26 @@ interface FormValues {
 
 const EventAdd: FC = () => {
   const { push, back } = useRouter();
+  const [images, setImages] = useState<File[]>([]);
 
   const onSubmit = async (
     values: FormValues,
-    { setSubmitting, resetForm }: FormikHelpers<FormValues>
+    { setSubmitting }: FormikHelpers<FormValues>
   ) => {
     try {
-      const response = await apiFetch<{ message: string }>("/events", {
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("description", values.description);
+      images.forEach((image) => formData.append("images", image));
+
+      await apiFetch<{ message: string }>("/events", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: formData, // Send formData instead of JSON
       });
 
       push("/events");
     } catch (error) {
+      console.error("Upload failed", error);
     } finally {
       setSubmitting(false);
     }
@@ -52,7 +58,7 @@ const EventAdd: FC = () => {
           <Form className={styles.form}>
             <TextInput label="Title" name="title" />
             <TextAreaInput label="Description" name="description" />
-            <ImageInput />
+            <ImageInput onImagesChange={setImages} />
             <div className={styles.footer}>
               <Button variant="ghost" type="button" onClick={() => back()}>
                 Cancel

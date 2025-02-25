@@ -3,21 +3,28 @@ import { useDropzone } from "react-dropzone";
 import Modal from "react-modal";
 import styles from "./styles.module.scss";
 
-// Set the root element for accessibility (required by react-modal)
-// Modal.setAppElement("#__next");
+interface ImageInputProps {
+  onImagesChange: (images: File[]) => void;
+}
 
-const ImageInput: FC = () => {
+const ImageInput: FC<ImageInputProps> = ({ onImagesChange }) => {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: {
-      "image/*": [".jpeg", ".png", ".jpg"],
-    },
+    accept: { "image/*": [".jpeg", ".png", ".jpg"] },
     onDrop: (acceptedFiles) => {
-      const imageUrls = acceptedFiles.map((file) => URL.createObjectURL(file));
-      setPreviewImages((prev) => [...prev, ...imageUrls]);
+      const newImageUrls = acceptedFiles.map((file) =>
+        URL.createObjectURL(file)
+      );
+      setPreviewImages((prev) => [...prev, ...newImageUrls]);
+      setSelectedFiles((prev) => {
+        const updatedFiles = [...prev, ...acceptedFiles];
+        onImagesChange(updatedFiles); // Pass updated images to parent
+        return updatedFiles;
+      });
     },
   });
 
@@ -26,9 +33,7 @@ const ImageInput: FC = () => {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const closeModal = () => setIsModalOpen(false);
 
   const goToPrevious = () => {
     setCurrentImageIndex((prev) =>

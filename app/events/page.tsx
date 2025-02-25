@@ -31,7 +31,7 @@ const EventListing: FC = () => {
       {/* Header */}
       <div className={styles.header}>
         <h1>Events</h1>
-        <Button onClick={() => push("/event/add")}>+ Add Event</Button>
+        <Button onClick={() => push("/events/add")}>+ Add Event</Button>
       </div>
 
       {/* Loading State */}

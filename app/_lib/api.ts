@@ -15,30 +15,32 @@ export async function apiFetch<T>(
     let authHeader = {};
 
     if (options.auth !== false) {
-      const session = await getSession(); // Fetch session only when auth is needed
+      const session = await getSession();
 
       if (session?.user?.accessToken) {
         authHeader = { Authorization: `Bearer ${session.user.accessToken}` };
       }
     }
 
+    const isMultipart = options.body instanceof FormData;
+
     const res = await fetch(`${BASE_URL}${endpoint}`, {
       ...options,
       headers: {
-        "Content-Type": "application/json",
+        ...(isMultipart ? {} : { "Content-Type": "application/json" }), // Don't set for FormData
         ...authHeader,
-        ...options.headers, // Allow additional headers
+        ...options.headers,
       },
     });
 
     if (res.status === 401) {
       console.warn("Unauthorized access detected, logging out...");
-      await signOut({ redirectTo: "/sign-in" }); // Sign the user out
+      await signOut({ redirectTo: "/sign-in" });
       return Promise.reject(new Error("Unauthorized"));
     }
 
     if (!res.ok) {
-      const errorText = await res.text(); // Get detailed error message
+      const errorText = await res.text();
       throw new Error(`Fetch error: ${res.status} - ${errorText}`);
     }
 
