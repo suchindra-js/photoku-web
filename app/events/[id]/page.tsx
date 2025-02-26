@@ -1,23 +1,22 @@
 "use client";
-
 import { FC, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { apiFetch } from "app/_lib/api";
 import styles from "./styles.module.scss";
 import Button from "@components/button";
-import { Event } from "app/_types/event";
+import { EventWithImages } from "app/_types/event";
 
 const EventDetail: FC = () => {
   const { id } = useParams();
   const router = useRouter();
-  const [event, setEvent] = useState<Event | null>(null);
+  const [data, setData] = useState<EventWithImages | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await apiFetch<Event>(`/events/${id}`);
-        setEvent(response);
+        const response = await apiFetch<EventWithImages>(`/events/${id}`);
+        setData(response);
       } catch (error) {
         console.error("Failed to fetch event:", error);
       } finally {
@@ -28,21 +27,36 @@ const EventDetail: FC = () => {
     if (id) fetchEvent();
   }, [id]);
 
-  if (loading) return <p>Loading event details...</p>;
-  if (!event) return <p>Event not found.</p>;
+  if (loading)
+    return <p className={styles.loading}>Loading event details...</p>;
+  if (!data) return <p className={styles.error}>Event not found.</p>;
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h1>{event.title}</h1>
-        <Button variant="ghost" onClick={() => router.push("/events")}>
-          Back
-        </Button>
+      {/* Banner Section */}
+      <div className={styles.banner}>
+        <div className={styles.overlay}>
+          <h1>{data.event.title}</h1>
+          <p>{data.event.description}</p>
+          <p className={styles.date}>
+            Created at: {new Date(data.event.createdAt).toLocaleDateString()}
+          </p>
+          <Button variant="ghost" onClick={() => router.push("/events")}>
+            Back to Events
+          </Button>
+        </div>
       </div>
-      <p className={styles.description}>{event.description}</p>
-      <p className={styles.date}>
-        Created at: {new Date(event.createdAt).toLocaleDateString()}
-      </p>
+
+      {/* Image Gallery */}
+      {data.images.length > 0 && (
+        <div className={styles.gallery}>
+          {data.images.map((img, index) => (
+            <div key={index} className={styles.imageCard}>
+              <img src={img.url} alt={`Event Image ${index + 1}`} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
