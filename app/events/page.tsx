@@ -26,6 +26,16 @@ const EventListing: FC = () => {
     fetchEvents();
   }, []);
 
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this event?")) return;
+    try {
+      await apiFetch(`/events/${id}`, { method: "DELETE" });
+      setEvents((prev) => prev.filter((event) => event.id.toString() !== id));
+    } catch (error) {
+      console.error("Failed to delete event:", error);
+    }
+  };
+
   return (
     <div className={styles.container}>
       {/* Header */}
@@ -42,13 +52,17 @@ const EventListing: FC = () => {
       ) : (
         <div className={styles.eventList}>
           {events.map((event) => (
-            <div
-              key={event.id}
-              className={styles.eventCard}
-              onClick={() => push(`/events/${event.id}`)}
-            >
-              <h3>{event.title}</h3>
-              <p>{event.description}</p>
+            <div key={event.id} className={styles.eventCard}>
+              <div onClick={() => push(`/events/${event.id}`)}>
+                <h3>{event.title}</h3>
+                <p>{event.description}</p>
+              </div>
+              <button
+                className={styles.deleteButton}
+                onClick={() => handleDelete(event.id.toString())}
+              >
+                Delete
+              </button>
             </div>
           ))}
         </div>

@@ -24,6 +24,9 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .eventCard:hover {
@@ -37,4 +40,18 @@
 .eventCard p {
   margin: 5px 0 0;
   color: #666;
+}
+
+.deleteButton {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.deleteButton:hover {
+  background: #cc0000;
 }
