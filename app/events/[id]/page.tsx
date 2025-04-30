@@ -5,6 +5,15 @@ import { apiFetch } from "app/_lib/api";
 import styles from "./styles.module.scss";
 import Button from "@components/button";
 import { EventWithImages } from "app/_types/event";
+import ImageGallery from "app/components/ImageGallery";
+
+interface GridImage {
+  src: string;
+  width: number;
+  height: number;
+  alt?: string;
+  caption?: string;
+}
 
 const EventDetail: FC = () => {
   const { id } = useParams();
@@ -31,6 +40,15 @@ const EventDetail: FC = () => {
     return <p className={styles.loading}>Loading event details...</p>;
   if (!data) return <p className={styles.error}>Event not found.</p>;
 
+  // Transform event images into grid images
+  const gridImages: GridImage[] = data.images.map((img) => ({
+    src: img.url,
+    width: 320,
+    height: 240,
+    alt: `Event Image ${img.filename}`,
+    caption: `Uploaded: ${new Date(img.createdAt).toLocaleDateString()}`,
+  }));
+
   return (
     <div className={styles.container}>
       {/* Banner Section */}
@@ -48,15 +66,7 @@ const EventDetail: FC = () => {
       </div>
 
       {/* Image Gallery */}
-      {data.images.length > 0 && (
-        <div className={styles.gallery}>
-          {data.images.map((img, index) => (
-            <div key={index} className={styles.imageCard}>
-              <img src={img.url} alt={`Event Image ${index + 1}`} />
-            </div>
-          ))}
-        </div>
-      )}
+      {data.images.length > 0 && <ImageGallery images={gridImages} />}
     </div>
   );
 };

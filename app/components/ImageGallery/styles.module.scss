@@ -1,0 +1,23 @@
+.galleryContainer {
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.galleryRow {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.galleryItem {
+  flex: 1;
+  height: 300px;
+  min-width: 0; // Prevents flex items from overflowing
+  position: relative;
+}
